@@ -15,7 +15,9 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "moduleResolution": "node",
+    "declaration": true,
+    "declarationMap": false,
+    "declarationDir": "./types",
     "typeRoots": ["./node_modules/@types", "./types"],
     "paths": {}
   },

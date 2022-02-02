@@ -1,43 +1,11 @@
-import jp from 'jsonpath';
-
-function addPath(path, key) {
-    return path + '.' + key;
+import jp from "jsonpath";
+import { addPath, isRef, Ref } from "@coussin/shared";
+export class SerializeData {
+    type;
+    subType;
+    body;
 }
-function Ref(path) {
-    return {
-        _t_: 'Ref',
-        v: path,
-    };
-}
-function isRef(data) {
-    return data && typeof data === 'object' && data._t_ === 'Ref';
-}
-
-function deepMerge(target, obj) {
-    // 1 - 基础类型优先存储target[key]
-    // 2 - target[key] 如果为null或undef 则读取obj[key]
-    // 3 - target 如果是数组则与 obj.length 比较 一样的话进行递归
-    if (target && typeof target === "object") {
-        for (const key in obj) {
-            Reflect.set(target, key, deepMerge(target[key], obj[key]));
-        }
-        return target;
-    }
-    else if (Array.isArray(target)) {
-        if (target?.length !== obj?.length) {
-            return target;
-        }
-        for (let i = 0; i < target.length; i++) {
-            target[i] = deepMerge(target[i], obj[i]);
-        }
-        return target;
-    }
-    else {
-        return target === null || target === undefined ? obj : target;
-    }
-}
-
-class SerializerOptions {
+export class SerializerOptions {
     customTypes = [];
     customSpecialType = [];
 }
@@ -121,7 +89,7 @@ class SpecialTypeManager {
         return typeof type === "string" ? type : type.name;
     }
 }
-class Serializer {
+export class Serializer {
     _customTypeManager;
     _specialTypeManager;
     _refMap = new Map();
@@ -252,167 +220,3 @@ class Serializer {
  * 1 - JSON 反序列化
  * 2 - JSON 转 实体对象
  */
-
-class Shim {
-    constructor(option) {
-        this.init(option);
-    }
-    init(option) {
-        // init shim
-    }
-}
-
-class NoopShim extends Shim {
-    specialTypes() {
-        return [];
-    }
-    collect(target, idMapEntity = new Map(), path = "$") {
-        if (!target) {
-            return;
-        }
-        if (typeof target !== "object") {
-            return;
-        }
-        if (Array.isArray(target)) {
-            for (let index = 0; index < target.length; index++) {
-                const element = target[index];
-                this.collect(element, idMapEntity, addPath(path, index));
-            }
-            return;
-        }
-        if (!target.id) {
-            return;
-        }
-        const entityId = target.id;
-        const entity = idMapEntity.get(entityId);
-        if (entity) {
-            return;
-        }
-        idMapEntity.set(entityId, { entity: target, path });
-        for (const key in target) {
-            const element = target[key];
-            this.collect(element, idMapEntity, addPath(path, key));
-        }
-        return idMapEntity;
-    }
-}
-
-class CacheAdapter {
-    constructor(option) {
-        this.init(option);
-    }
-    init(option) {
-        // init cache adapter
-    }
-}
-
-class MemoryCacheAdapter extends CacheAdapter {
-    get(key) {
-        throw new Error("Method not implemented.");
-    }
-    set(key, value, maxAge) {
-        throw new Error("Method not implemented.");
-    }
-    del(key) {
-        throw new Error("Method not implemented.");
-    }
-    expire(key, maxAge) {
-        throw new Error("Method not implemented.");
-    }
-    ttl(key) {
-        throw new Error("Method not implemented.");
-    }
-    destroy() {
-        throw new Error("Method not implemented.");
-    }
-    keys(prefix) {
-        throw new Error("Method not implemented.");
-    }
-    storeDepRelation(entityKeys, cacheKey) {
-        throw new Error("Method not implemented.");
-    }
-    flush(entityKeys) {
-        throw new Error("Method not implemented.");
-    }
-}
-
-class CacheOptions {
-    scope = ""; // 作业域
-    maxAge = 10000; // s
-    threshold = Math.floor(this.maxAge / 3); // s 当过期时间小于这个数字的时候续租
-    adapter = MemoryCacheAdapter;
-    options = {};
-    customTypes = [];
-    shim = NoopShim;
-    shimOptions = null;
-}
-class Cache {
-    _options;
-    _cacheAdapter;
-    _serializer;
-    _shim;
-    constructor(options) {
-        deepMerge(options, new CacheOptions());
-        this._options = options;
-        this._cacheAdapter = new this._options.adapter(options.options);
-        this._shim = new this._options.shim(this._options.shimOptions);
-        this._serializer = new Serializer({
-            customTypes: options.customTypes,
-            customSpecialType: this._shim.specialTypes(),
-        });
-        process.on("exit", async () => {
-            await this.destroy();
-        });
-    }
-    get option() {
-        return this._options;
-    }
-    get cacheAdapter() {
-        return this._cacheAdapter;
-    }
-    async set(key, data, options) {
-        const cacheKey = this.forCacheKey(key);
-        const idMapEntity = new Map();
-        this._shim.collect(data, idMapEntity, "$");
-        const maxAge = options?.maxAge ?? this._options.maxAge;
-        await this._cacheAdapter.storeDepRelation(this.toEntityKeys(idMapEntity), cacheKey);
-        const cacheData = this._serializer.stringify(data);
-        return await this._cacheAdapter.set(cacheKey, cacheData, maxAge);
-    }
-    async get(key) {
-        this.tryRenewal(key);
-        const cacheData = await this._cacheAdapter.get(this.forCacheKey(key));
-        return this._serializer.parse(cacheData);
-    }
-    async tryRenewal(key) {
-        const cacheKey = this.forCacheKey(key);
-        if ((await this._cacheAdapter.ttl(cacheKey)) >= this._options.threshold) {
-            return;
-        }
-        const keys = await this._cacheAdapter.keys(`*${cacheKey}`);
-        keys.map((key) => this._cacheAdapter.expire(key, this.option.maxAge)); // 刷新依赖的过期时间
-        this._cacheAdapter.expire(cacheKey, this.option.maxAge); // 刷新自己的过期时间
-    }
-    async del(key) {
-        return await this._cacheAdapter.del(this.forCacheKey(key));
-    }
-    async flush(data) {
-        const idMapEntity = new Map();
-        this._shim.collect(data, idMapEntity, "$");
-        await this._cacheAdapter.flush(this.toEntityKeys(idMapEntity));
-    }
-    destroy() {
-        return this._cacheAdapter.destroy();
-    }
-    forCacheKey(key) {
-        return `c:${this._options.scope}:${key}`;
-    }
-    forDepCacheKey(key) {
-        return this.forCacheKey(`_dep_:${key}`);
-    }
-    toEntityKeys(idMapEntity) {
-        return [...idMapEntity.keys()].map((id) => this.forDepCacheKey(`${idMapEntity.get(id).entity?.constructor?.name}:${id}`));
-    }
-}
-
-export { Cache, CacheOptions };

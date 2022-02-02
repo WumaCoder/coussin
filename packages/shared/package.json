@@ -1,14 +1,10 @@
 {
-  "name": "@coussin/shim-mikro-orm",
+  "name": "@coussin/shared",
   "version": "0.0.0",
-  "description": "coussin shim for mikro-orm",
-  "main": "src/main.ts",
+  "description": "coussin shared",
+  "main": "lib/coussin-shared.cjs.js",
+  "module": "lib/coussin-shared.es.js",
   "license": "MIT",
-  "publishConfig": {
-    "access": "public",
-    "main": "lib/coussin-shim-mikro-orm.cjs.js",
-    "module": "lib/coussin-shim-mikro-orm.es.js"
-  },
   "scripts": {
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -27,8 +23,12 @@
   ],
   "author": "WumaCoder",
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.1.3",
     "@rollup/plugin-typescript": "^8.3.0",
+    "@types/jest": "^27.4.0",
+    "jest": "^27.4.7",
     "rollup": "^2.67.0",
+    "ts-jest": "^27.1.3",
     "ts-node": "^10.4.0",
     "tslib": "^2.3.1",
     "typescript": "^4.5.5"

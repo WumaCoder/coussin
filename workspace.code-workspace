@@ -13,6 +13,14 @@
       "path": "packages/core"
     },
     {
+      "name": "📦 @coussin/nest",
+      "path": "packages/nest"
+    },
+    {
+      "name": "📦 @coussin/shared",
+      "path": "packages/shared"
+    },
+    {
       "name": "📦 @coussin/shim-mikro-orm",
       "path": "packages/shim-mikro-orm"
     }

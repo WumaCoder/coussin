@@ -5,11 +5,11 @@ export default {
   input: "src/index.ts",
   output: [
     {
-      file: "lib/coussin-core.cjs.js",
+      file: "lib/coussin-shared.cjs.js",
       format: "cjs",
     },
     {
-      file: "lib/coussin-core.es.js",
+      file: "lib/coussin-shared.es.js",
       format: "es",
     },
   ],
