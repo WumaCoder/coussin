@@ -1,0 +1,36 @@
+{
+  "name": "@coussin/nest",
+  "version": "0.0.0",
+  "description": "coussin nest",
+  "main": "src/main.ts",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public",
+    "main": "lib/coussin-core.cjs.js",
+    "module": "lib/coussin-core.es.js"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cache",
+    "nest",
+    "ts",
+    "typescript",
+    "decorator",
+    "egg",
+    "node",
+    "server",
+    "mikro-orm",
+    "typeorm"
+  ],
+  "author": "WumaCoder",
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^8.3.0",
+    "rollup": "^2.67.0",
+    "ts-node": "^10.4.0",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.5"
+  }
+}

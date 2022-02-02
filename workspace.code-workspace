@@ -1,0 +1,21 @@
+{
+  "folders": [
+    {
+      "name": "✨ coussin",
+      "path": "."
+    },
+    {
+      "name": "📦 @coussin/adapter-redis",
+      "path": "packages/adapter-redis"
+    },
+    {
+      "name": "📦 @coussin/core",
+      "path": "packages/core"
+    },
+    {
+      "name": "📦 @coussin/shim-mikro-orm",
+      "path": "packages/shim-mikro-orm"
+    }
+  ],
+  "settings": {}
+}

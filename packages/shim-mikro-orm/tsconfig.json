@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "importHelpers": true,
+    "strict": true,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "esnext",
+    "sourceMap": false,
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false,
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "paths": {}
+  },
+  "exclude": ["node_modules"]
+}
