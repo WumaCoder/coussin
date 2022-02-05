@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDir": "",
     "importHelpers": true,
     "strict": true,
     "module": "esnext",
@@ -19,6 +19,5 @@
     "typeRoots": ["./node_modules/@types", "./types"],
     "paths": {}
   },
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*.ts"]
 }
