@@ -415,4 +415,4 @@ class Cache {
     }
 }
 
-export { Cache, CacheOptions };
+export { Cache, CacheAdapter, CacheOptions };

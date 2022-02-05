@@ -1,4 +1,4 @@
-import { CacheAdapter } from "../adapter";
+import { CacheAdapter } from "../cache-adapter";
 
 export class MemoryCacheAdapter extends CacheAdapter<null> {
   get(key: string): string | Promise<string> {

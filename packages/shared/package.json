@@ -4,9 +4,10 @@
   "description": "coussin shared",
   "main": "lib/coussin-shared.cjs.js",
   "module": "lib/coussin-shared.es.js",
+  "types": "types/index.d.ts",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c && tsc",
     "test": "jest"
   },
   "keywords": [

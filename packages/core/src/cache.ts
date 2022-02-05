@@ -2,7 +2,7 @@ import { Constructor, deepMerge } from "@coussin/shared";
 import { Serializer } from "./serializer";
 import { Shim } from "./shim";
 import { NoopShim } from "./shim/noop.shim";
-import { CacheAdapter } from "./adapter";
+import { CacheAdapter } from "./cache-adapter";
 import { IdMapEntityPath } from "@coussin/shared";
 import { MemoryCacheAdapter } from "./adapter/memory-cache.adapter";
 

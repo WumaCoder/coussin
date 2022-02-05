@@ -16,6 +16,8 @@ export default {
   external: ["jsonpath"],
   plugins: [
     nodeResolve({ extensions: [".ts", ".js"] }),
-    ts({ outputToFilesystem: false }),
+    ts({
+      outputToFilesystem: false,
+    }),
   ],
 };
