@@ -426,3 +426,4 @@ class Cache {
 exports.Cache = Cache;
 exports.CacheAdapter = CacheAdapter;
 exports.CacheOptions = CacheOptions;
+exports.Shim = Shim;
