@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "rootDir": "",
     "importHelpers": true,
     "strict": true,
     "module": "esnext",
@@ -14,8 +15,9 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
+    "moduleResolution": "node",
     "typeRoots": ["./node_modules/@types", "./types"],
     "paths": {}
   },
-  "exclude": ["node_modules"]
+  "include": ["src/**/*.ts"]
 }
