@@ -13,5 +13,9 @@ export default {
       format: "es",
     },
   ],
-  plugins: [nodeResolve({ extensions: ["ts", "js"] }), ts({})],
+  external: ["jsonpath"],
+  plugins: [
+    nodeResolve({ extensions: [".ts", ".js"] }),
+    ts({ outputToFilesystem: false }),
+  ],
 };

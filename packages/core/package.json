@@ -2,13 +2,9 @@
   "name": "@coussin/core",
   "version": "0.0.0",
   "description": "a cache lib.",
-  "main": "src/main.ts",
+  "main": "lib/coussin-core.cjs.js",
+  "module": "lib/coussin-core.es.js",
   "license": "MIT",
-  "publishConfig": {
-    "access": "public",
-    "main": "lib/coussin-core.cjs.js",
-    "module": "lib/coussin-core.es.js"
-  },
   "scripts": {
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"

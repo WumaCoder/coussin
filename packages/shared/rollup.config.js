@@ -13,5 +13,8 @@ export default {
       format: "es",
     },
   ],
-  plugins: [nodeResolve({ extensions: ["ts", "js"] }), ts({})],
+  plugins: [
+    nodeResolve({ extensions: [".ts", ".js"] }),
+    ts({ outputToFilesystem: false }),
+  ],
 };
