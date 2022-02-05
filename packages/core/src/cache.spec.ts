@@ -1,6 +1,6 @@
 import { Cache } from "./cache";
 import { make } from "@coussin/shared";
-import { MemoryCacheAdapter } from "./adapter/memory-cache.adapter";
+import { MemoryAdapter } from "./adapter/memory-cache.adapter";
 
 class User {
   id: string;
@@ -22,7 +22,7 @@ class Permission {
 describe("Cache", () => {
   it("should be defined", () => {
     const cache = new Cache({
-      adapter: MemoryCacheAdapter,
+      adapter: MemoryAdapter,
       options: {
         port: 6379,
       },
@@ -35,7 +35,7 @@ describe("Cache", () => {
 
   it("should cache notid data", async () => {
     const cache = new Cache({
-      adapter: MemoryCacheAdapter,
+      adapter: MemoryAdapter,
       options: {
         port: 6379,
       },
@@ -78,7 +78,7 @@ describe("Cache", () => {
 
   it("should cache user", async () => {
     const cache = new Cache({
-      adapter: MemoryCacheAdapter,
+      adapter: MemoryAdapter,
       options: {
         port: 6379,
       },
@@ -103,7 +103,7 @@ describe("Cache", () => {
 
   it("should cache user and role", async () => {
     const cache = new Cache({
-      adapter: MemoryCacheAdapter,
+      adapter: MemoryAdapter,
       options: {
         port: 6379,
       },

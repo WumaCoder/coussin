@@ -4,6 +4,7 @@
   "description": "coussin adapter for redis",
   "main": "lib/coussin-adapter-redis.cjs.js",
   "module": "lib/coussin-adapter-redis.es.js",
+  "types": "./types",
   "license": "MIT",
   "scripts": {
     "build": "rollup -c && tsc",

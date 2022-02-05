@@ -2,15 +2,15 @@ import { Constructor, deepMerge } from "@coussin/shared";
 import { Serializer } from "./serializer";
 import { Shim } from "./shim";
 import { NoopShim } from "./shim/noop.shim";
-import { CacheAdapter } from "./cache-adapter";
+import { Adapter } from "./cache-adapter";
 import { IdMapEntityPath } from "@coussin/shared";
-import { MemoryCacheAdapter } from "./adapter/memory-cache.adapter";
+import { MemoryAdapter } from "./adapter/memory-cache.adapter";
 
 export class CacheOptions<CO, SO> {
   scope?: string = ""; // 作业域
   maxAge?: number = 10000; // s
   threshold?: number = Math.floor(this.maxAge / 3); // s 当过期时间小于这个数字的时候续租
-  adapter?: Constructor<CacheAdapter<CO>> = MemoryCacheAdapter;
+  adapter?: Constructor<Adapter<CO>> = MemoryAdapter;
   options?: CO = {} as CO;
   customTypes?: Constructor<any>[] = [];
   shim?: Constructor<Shim<SO>> = NoopShim;
@@ -23,7 +23,7 @@ export type CacheGetOptions = {
 
 export class Cache<CO, SO> {
   private _options: CacheOptions<CO, SO>;
-  private _cacheAdapter: CacheAdapter<CO>;
+  private _cacheAdapter: Adapter<CO>;
   private _serializer: Serializer;
   private _shim: Shim<SO>;
 

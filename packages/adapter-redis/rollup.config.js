@@ -13,7 +13,7 @@ export default {
       format: "es",
     },
   ],
-  external: ["jsonpath"],
+  external: ["ioredis", "jsonpath"],
   plugins: [
     nodeResolve({ extensions: [".ts", ".js"] }),
     ts({ outputToFilesystem: false }),

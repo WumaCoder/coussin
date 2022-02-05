@@ -1,6 +1,6 @@
-import { CacheAdapter } from "../cache-adapter";
+import { Adapter } from "../cache-adapter";
 
-export class MemoryCacheAdapter extends CacheAdapter<null> {
+export class MemoryAdapter extends Adapter<null> {
   get(key: string): string | Promise<string> {
     throw new Error("Method not implemented.");
   }

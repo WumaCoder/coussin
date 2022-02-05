@@ -1,4 +1,4 @@
-export abstract class CacheAdapter<O> {
+export abstract class Adapter<O> {
   constructor(option: O) {
     this.init(option);
   }
@@ -16,7 +16,7 @@ export abstract class CacheAdapter<O> {
   abstract keys(prefix: string): string[] | Promise<string[]>;
   abstract storeDepRelation(
     entityKeys: string[],
-    cacheKey: string,
+    cacheKey: string
   ): any | Promise<any>;
   abstract flush(entityKeys: string[]): any | Promise<any>;
 }

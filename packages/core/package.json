@@ -4,7 +4,7 @@
   "description": "a cache lib.",
   "main": "lib/coussin-core.cjs.js",
   "module": "lib/coussin-core.es.js",
-  "types": "./types/index.d.ts",
+  "types": "./types",
   "license": "MIT",
   "scripts": {
     "build": "rollup -c && tsc",

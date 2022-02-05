@@ -297,7 +297,7 @@ class NoopShim extends Shim {
     }
 }
 
-class CacheAdapter {
+class Adapter {
     constructor(option) {
         this.init(option);
     }
@@ -306,7 +306,7 @@ class CacheAdapter {
     }
 }
 
-class MemoryCacheAdapter extends CacheAdapter {
+class MemoryAdapter extends Adapter {
     get(key) {
         throw new Error("Method not implemented.");
     }
@@ -340,7 +340,7 @@ class CacheOptions {
     scope = ""; // 作业域
     maxAge = 10000; // s
     threshold = Math.floor(this.maxAge / 3); // s 当过期时间小于这个数字的时候续租
-    adapter = MemoryCacheAdapter;
+    adapter = MemoryAdapter;
     options = {};
     customTypes = [];
     shim = NoopShim;
@@ -415,4 +415,4 @@ class Cache {
     }
 }
 
-export { Cache, CacheAdapter, CacheOptions, Shim };
+export { Adapter, Cache, CacheOptions, MemoryAdapter, Shim };

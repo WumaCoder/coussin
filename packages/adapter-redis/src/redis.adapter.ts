@@ -1,11 +1,11 @@
 import IORedis, { Redis, RedisOptions } from "ioredis";
-import { CacheAdapter } from "@coussin/core";
+import { Adapter } from "@coussin/core";
 
 export interface RedisCacheOptions extends RedisOptions {
   redis?: Redis;
 }
 
-export class RedisCacheAdapter extends CacheAdapter<RedisCacheOptions> {
+export class RedisAdapter extends Adapter<RedisCacheOptions> {
   private _client: Redis;
 
   protected init(options: RedisCacheOptions) {
