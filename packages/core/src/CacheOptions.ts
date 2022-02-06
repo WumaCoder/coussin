@@ -5,7 +5,7 @@ import { Adapter } from "./CacheAdapter";
 import { MemoryAdapter } from "./adapter/memory-cache.adapter";
 
 export class CacheOptions<CO, SO> {
-  scope?: string = ""; // 作业域
+  scope?: string = "default"; // 作用域
   maxAge?: number = 10000; // s
   threshold?: number = Math.floor(this.maxAge / 3); // s 当过期时间小于这个数字的时候续租
   adapter?: Constructor<Adapter<CO>> = MemoryAdapter;

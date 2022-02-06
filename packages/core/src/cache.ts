@@ -4,6 +4,7 @@ import { Shim } from "./Shim";
 import { Adapter } from "./CacheAdapter";
 import { IdMapEntityPath } from "@coussin/shared";
 import { CacheOptions } from "./CacheOptions";
+import { CacheManager } from "./CacheManager";
 
 export class Cache<CO, SO> {
   private _options: CacheOptions<CO, SO>;
@@ -20,6 +21,7 @@ export class Cache<CO, SO> {
       customTypes: options.customTypes,
       customSpecialType: this._shim.specialTypes(),
     });
+    CacheManager.set(this._options.scope, this);
 
     process.on("exit", async () => {
       await this.destroy();
