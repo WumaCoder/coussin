@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "rootDir": "./src",
     "importHelpers": true,
     "strict": true,
     "module": "esnext",
@@ -7,15 +9,20 @@
     "allowSyntheticDefaultImports": true,
     "target": "esnext",
     "sourceMap": false,
-    "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
+    "moduleResolution": "node",
     "typeRoots": ["./node_modules/@types", "./types"],
-    "paths": {}
+    "paths": {},
+    "outDir": "dist",
+    "declaration": true,
+    "declarationDir": "types",
+    "declarationMap": true
   },
-  "exclude": ["node_modules"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "types", "dist", ".rollup.cache"]
 }
