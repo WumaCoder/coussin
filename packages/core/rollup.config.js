@@ -13,7 +13,7 @@ export default {
       format: "es",
     },
   ],
-  external: ["jsonpath"],
+  external: ["jsonpath", "@coussin/shared"],
   plugins: [
     nodeResolve({ extensions: [".ts", ".js"] }),
     ts({

@@ -10,6 +10,7 @@ specifiers:
   add: ^2.0.6
   jest: ^27.4.7
   jsonpath: ^1.1.1
+  rimraf: ^3.0.2
   rollup: ^2.67.0
   ts-jest: ^27.1.3
   ts-node: ^10.4.0
@@ -28,6 +29,7 @@ devDependencies:
   '@types/jsonpath': registry.npmjs.org/@types/jsonpath/0.2.0
   '@types/node': registry.npmjs.org/@types/node/17.0.14
   jest: registry.npmjs.org/jest/27.4.7_ts-node@10.4.0
+  rimraf: registry.npmjs.org/rimraf/3.0.2
   rollup: registry.npmjs.org/rollup/2.67.0
   ts-jest: registry.npmjs.org/ts-jest/27.1.3_a7e53b5e5b59e71a0fd4d8cf128393d5
   ts-node: registry.npmjs.org/ts-node/10.4.0_43d2036524ce97aa8076ce68340fa9ec

@@ -1,66 +1,6 @@
+import { Ref, addPath, isRef, deepMerge, defaultKey, CacheResultOptions, invader, CacheFlushOptions } from '@coussin/shared';
 import jp from 'jsonpath';
 
-function addPath(path, key) {
-    return path + '.' + key;
-}
-function Ref(path) {
-    return {
-        _t_: 'Ref',
-        v: path,
-    };
-}
-function isRef(data) {
-    return data && typeof data === 'object' && data._t_ === 'Ref';
-}
-
-function deepMerge(target, obj) {
-    // 1 - 基础类型优先存储target[key]
-    // 2 - target[key] 如果为null或undef 则读取obj[key]
-    // 3 - target 如果是数组则与 obj.length 比较 一样的话进行递归
-    if (target && typeof target === "object") {
-        for (const key in obj) {
-            Reflect.set(target, key, deepMerge(target[key], obj[key]));
-        }
-        return target;
-    }
-    else if (Array.isArray(target)) {
-        if (target?.length !== obj?.length) {
-            return target;
-        }
-        for (let i = 0; i < target.length; i++) {
-            target[i] = deepMerge(target[i], obj[i]);
-        }
-        return target;
-    }
-    else {
-        return target === null || target === undefined ? obj : target;
-    }
-}
-
-class SerializerOptions {
-    customTypes = [];
-    customSpecialType = [];
-}
-class CustomTypeManager {
-    _customTypeMap = new Map();
-    constructor(customTypes = []) {
-        customTypes.forEach((type) => this.addCustomType(type));
-        this.addCustomType(Object);
-        this.addCustomType(Array);
-    }
-    addCustomType(type) {
-        this._customTypeMap.set(type.name, type);
-    }
-    delCustomType(type) {
-        this._customTypeMap.delete(type.name);
-    }
-    get(type) {
-        return this._customTypeMap.get(type);
-    }
-    has(type) {
-        return this._customTypeMap.has(type);
-    }
-}
 class SpecialTypeManager {
     _specialTypeMap = new Map();
     _jsSpecialTypes = [
@@ -121,6 +61,33 @@ class SpecialTypeManager {
         return typeof type === "string" ? type : type.name;
     }
 }
+
+class CustomTypeManager {
+    _customTypeMap = new Map();
+    constructor(customTypes = []) {
+        customTypes.forEach((type) => this.addCustomType(type));
+        this.addCustomType(Object);
+        this.addCustomType(Array);
+    }
+    addCustomType(type) {
+        this._customTypeMap.set(type.name, type);
+    }
+    delCustomType(type) {
+        this._customTypeMap.delete(type.name);
+    }
+    get(type) {
+        return this._customTypeMap.get(type);
+    }
+    has(type) {
+        return this._customTypeMap.has(type);
+    }
+}
+
+class SerializerOptions {
+    customTypes = [];
+    customSpecialType = [];
+}
+
 class Serializer {
     _customTypeManager;
     _specialTypeManager;
@@ -346,6 +313,7 @@ class CacheOptions {
     shim = NoopShim;
     shimOptions = null;
 }
+
 class Cache {
     _options;
     _cacheAdapter;
@@ -415,4 +383,71 @@ class Cache {
     }
 }
 
-export { Adapter, Cache, CacheOptions, MemoryAdapter, Shim };
+class CacheManager {
+    static store = new Map();
+    static get(key) {
+        return CacheManager.store.get(key);
+    }
+    static set(key, value) {
+        if (CacheManager.store.has(key)) {
+            console.warn(`cache scope ${key} has been set`);
+        }
+        CacheManager.store.set(key, value);
+    }
+}
+
+function createDecorator(scope = "default") {
+    return {
+        CacheResult(name, key = defaultKey, options) {
+            options = Object.assign({}, new CacheResultOptions(), { scope }, options);
+            return function (target, propertyKey, descriptor) {
+                name = name ?? `${target.constructor.name}:${propertyKey}`;
+                invader(descriptor, "value", {
+                    async before(ctx) {
+                        ctx.skip = true;
+                        const cache = CacheManager.get(options.scope);
+                        const cacheKey = `${name}:${key(...ctx.args)}`;
+                        let cacheData = await cache.get(cacheKey);
+                        if (!cacheData) {
+                            cacheData = await ctx.rawMethod(...ctx.args);
+                            await cache.set(cacheKey, cacheData, options);
+                        }
+                        return cacheData;
+                    },
+                });
+            };
+        },
+        CacheDelete(name, key = () => "*", options) {
+            options = Object.assign({}, new CacheResultOptions(), { scope }, options);
+            return function (target, propertyKey, descriptor) {
+                invader(descriptor, "value", {
+                    async before(ctx) {
+                        const cache = CacheManager.get(options.scope);
+                        const cacheKey = `${name}:${key(ctx.args, ctx.returned)}`;
+                        await cache.del(cacheKey);
+                    },
+                });
+            };
+        },
+        CacheFlush(options) {
+            options = Object.assign({}, new CacheFlushOptions(), { scope }, options);
+            return function (target, propertyKey, descriptor) {
+                invader(descriptor, "value", {
+                    async before(ctx) {
+                        ctx.skip = true;
+                        const cache = CacheManager.get(options.scope);
+                        const result = await ctx.rawMethod(...ctx.args);
+                        await cache.flush(result);
+                        return result;
+                    },
+                });
+            };
+        },
+    };
+}
+const defaultDecorator = createDecorator();
+const CacheResult = defaultDecorator.CacheResult;
+const CacheDelete = defaultDecorator.CacheDelete;
+const CacheFlush = defaultDecorator.CacheFlush;
+
+export { Adapter, Cache, CacheDelete, CacheFlush, CacheManager, CacheResult, MemoryAdapter, Shim, createDecorator };

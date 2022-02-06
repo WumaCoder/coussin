@@ -1,4 +1,4 @@
-import { Serializer } from "./serializer";
+import { Serializer } from "./Serializer";
 
 class Test {
   a = 1;

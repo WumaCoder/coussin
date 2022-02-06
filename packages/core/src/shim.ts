@@ -1,5 +1,5 @@
 import { IdMapEntityPath } from "@coussin/shared";
-import { SpecialType } from "./serializer";
+import { SpecialType } from "./Serializer";
 
 export abstract class Shim<O> {
   constructor(option: O) {

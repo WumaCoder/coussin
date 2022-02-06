@@ -1,25 +1,9 @@
-import { Constructor, deepMerge } from "@coussin/shared";
+import { CacheResultOptions, deepMerge } from "@coussin/shared";
 import { Serializer } from "./serializer";
-import { Shim } from "./shim";
-import { NoopShim } from "./shim/noop.shim";
-import { Adapter } from "./cache-adapter";
+import { Shim } from "./Shim";
+import { Adapter } from "./CacheAdapter";
 import { IdMapEntityPath } from "@coussin/shared";
-import { MemoryAdapter } from "./adapter/memory-cache.adapter";
-
-export class CacheOptions<CO, SO> {
-  scope?: string = ""; // 作业域
-  maxAge?: number = 10000; // s
-  threshold?: number = Math.floor(this.maxAge / 3); // s 当过期时间小于这个数字的时候续租
-  adapter?: Constructor<Adapter<CO>> = MemoryAdapter;
-  options?: CO = {} as CO;
-  customTypes?: Constructor<any>[] = [];
-  shim?: Constructor<Shim<SO>> = NoopShim;
-  shimOptions?: SO = null;
-}
-
-export type CacheGetOptions = {
-  maxAge?: number; // ms
-};
+import { CacheOptions } from "./CacheOptions";
 
 export class Cache<CO, SO> {
   private _options: CacheOptions<CO, SO>;
@@ -50,7 +34,7 @@ export class Cache<CO, SO> {
     return this._cacheAdapter;
   }
 
-  async set<T>(key: string, data: T, options?: CacheGetOptions) {
+  async set<T>(key: string, data: T, options?: CacheResultOptions) {
     const cacheKey = this.forCacheKey(key);
     const idMapEntity: IdMapEntityPath = new Map();
     this._shim.collect(data, idMapEntity, "$");

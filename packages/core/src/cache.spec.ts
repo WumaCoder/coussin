@@ -1,4 +1,4 @@
-import { Cache } from "./cache";
+import { Cache } from "./Cache";
 import { make } from "@coussin/shared";
 import { MemoryAdapter } from "./adapter/memory-cache.adapter";
 

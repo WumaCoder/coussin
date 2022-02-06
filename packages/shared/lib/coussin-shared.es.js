@@ -1,3 +1,11 @@
+class CacheFlushOptions {
+    scope = "";
+}
+class CacheResultOptions {
+    scope = "";
+    maxAge; // ms
+}
+
 function typeOf(data) {
     if (data === null) {
         return "Null";
@@ -131,4 +139,8 @@ function make(Entity, props) {
     return fill(new Entity(), props);
 }
 
-export { Ref, addPath, deepClone, deepMerge, fill, getConstructor, invader, isRef, make, typeOf };
+function defaultKey(...args) {
+    return args.map((item) => JSON.stringify(item)).join(",");
+}
+
+export { CacheFlushOptions, CacheResultOptions, Ref, addPath, deepClone, deepMerge, defaultKey, fill, getConstructor, invader, isRef, make, typeOf };

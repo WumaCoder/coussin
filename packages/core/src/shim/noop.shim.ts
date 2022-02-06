@@ -1,5 +1,5 @@
-import { SpecialType } from "../serializer";
-import { Shim } from "../shim";
+import { SpecialType } from "../Serializer";
+import { Shim } from "../Shim";
 import { IdMapEntityPath, JSONObject, addPath } from "@coussin/shared";
 
 export class NoopShim extends Shim<null> {

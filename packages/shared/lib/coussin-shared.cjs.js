@@ -2,6 +2,14 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+class CacheFlushOptions {
+    scope = "";
+}
+class CacheResultOptions {
+    scope = "";
+    maxAge; // ms
+}
+
 function typeOf(data) {
     if (data === null) {
         return "Null";
@@ -135,10 +143,17 @@ function make(Entity, props) {
     return fill(new Entity(), props);
 }
 
+function defaultKey(...args) {
+    return args.map((item) => JSON.stringify(item)).join(",");
+}
+
+exports.CacheFlushOptions = CacheFlushOptions;
+exports.CacheResultOptions = CacheResultOptions;
 exports.Ref = Ref;
 exports.addPath = addPath;
 exports.deepClone = deepClone;
 exports.deepMerge = deepMerge;
+exports.defaultKey = defaultKey;
 exports.fill = fill;
 exports.getConstructor = getConstructor;
 exports.invader = invader;
